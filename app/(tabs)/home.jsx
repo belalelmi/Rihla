@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  RefreshControl,
-  Alert,
-} from "react-native";
+import { View, Text, FlatList, Image, RefreshControl } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -14,29 +7,10 @@ import SearchInput from "../../components/SearchInput";
 import Trending from "../../components/Trending";
 import EmptyState from "../../components/EmptyState";
 import { getAllPosts } from "../../lib/appwrite";
+import useAppwrite from "../../lib/useAppwrite";
 
 const Home = () => {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-
-      try {
-        const res = await getAllPosts();
-        setData(res);
-      } catch (error) {
-        Alert.alert(["Error", error.message]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  console.log(data);
+  const { data: posts } = useAppwrite(getAllPosts);
 
   const [refreashing, setRefreashing] = useState(false);
 
@@ -45,6 +19,9 @@ const Home = () => {
     //recall videos -> if any new videos appeared
     setRefreashing(false);
   };
+
+  console.log(posts);
+
   return (
     <SafeAreaView className=" bg-primary h-full">
       <FlatList
