@@ -1,5 +1,5 @@
 import { View, Text, FlatList, Image, RefreshControl } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { images } from "../../constants";
@@ -10,16 +10,20 @@ import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
 import useAppwrite from "../../lib/useAppwrite";
 import VideoCard from "../../components/VideoCard";
 
+import { useGlobalContext } from "../../context/GlobalProvider";
+
 const Home = () => {
+  const { user, setUser, setIsLogged } = useGlobalContext();
+
   const { data: posts, refetch } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLatestPosts);
 
-  const [refreashing, setRefreashing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
-    setRefreashing(true);
+    setRefreshing(true);
     await refetch();
-    setRefreashing(false);
+    setRefreshing(false);
   };
 
   return (
@@ -33,10 +37,10 @@ const Home = () => {
             <View className="justify-between items-start flex-row mb-6">
               <View>
                 <Text className="font-pmedium text-sm text-gray-100">
-                  Welcome back
+                  Welcome back,
                 </Text>
                 <Text className="font-psemibold text-2xl text-white">
-                  BHE WORLD
+                  {user.documents[0].username}
                 </Text>
               </View>
 
@@ -67,7 +71,7 @@ const Home = () => {
           />
         )}
         refreshControl={
-          <RefreshControl refreshing={refreashing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
     </SafeAreaView>

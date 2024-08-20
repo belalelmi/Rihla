@@ -1,7 +1,5 @@
 import { useState } from "react";
 import {
-  View,
-  Text,
   FlatList,
   TouchableOpacity,
   ImageBackground,
@@ -22,12 +20,13 @@ const zoomIn = {
 
 const zoomOut = {
   0: {
-    scale: 1.1,
+    scale: 1,
   },
   1: {
     scale: 0.9,
   },
 };
+
 const TrendingItem = ({ activeItem, item }) => {
   const [play, setPlay] = useState(false);
 
@@ -40,9 +39,9 @@ const TrendingItem = ({ activeItem, item }) => {
       {play ? (
         <Video
           source={{ uri: item.video }}
-          className="w-52 h-72 rounded-[35px] mt-3 bg-white/10"
-          resizeMode={ResizeMode.CONTAIN}
+          className="w-52 h-72 rounded-[33px] mt-3 bg-white/10"
           useNativeControls
+          resizeMode={ResizeMode.CONTAIN}
           shouldPlay
           onPlaybackStatusUpdate={(status) => {
             if (status.didJustFinish) {
@@ -75,7 +74,7 @@ const TrendingItem = ({ activeItem, item }) => {
 };
 
 const Trending = ({ posts }) => {
-  const [activeItem, setActiveItem] = useState(posts[1]);
+  const [activeItem, setActiveItem] = useState(posts[0]);
 
   const viewableItemsChanged = ({ viewableItems }) => {
     if (viewableItems.length > 0) {
